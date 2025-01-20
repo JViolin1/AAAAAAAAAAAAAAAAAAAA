@@ -1,0 +1,109 @@
+[gd_scene load_steps=13 format=3 uid="uid://c8f1p2wuofm24"]
+
+[ext_resource type="Script" path="res://Scenes/enemy.gd" id="1_nw0vk"]
+[ext_resource type="Texture2D" uid="uid://c5wo15rxr7l0t" path="res://zombie.png" id="2_sv05m"]
+[ext_resource type="AudioStream" uid="uid://cshlvyp3nn0fd" path="res://hitHurt(1).wav" id="3_exm37"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ckiqh"]
+radius = 48.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l0j2q"]
+atlas = ExtResource("2_sv05m")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o2hgr"]
+atlas = ExtResource("2_sv05m")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8a6s1"]
+atlas = ExtResource("2_sv05m")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8skn2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l0j2q")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o2hgr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8a6s1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l0j2q")
+}],
+"loop": true,
+"name": &"Walk",
+"speed": 4.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s64iu"]
+radius = 1280.9
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pomkm"]
+radius = 64.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3umu5"]
+bg_color = Color(0, 0, 0, 1)
+expand_margin_left = 8.0
+expand_margin_top = 8.0
+expand_margin_right = 8.0
+expand_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0ut0l"]
+bg_color = Color(0.196078, 0.588235, 0.196078, 1)
+
+[node name="Enemy" type="CharacterBody2D"]
+y_sort_enabled = true
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_nw0vk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ckiqh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(3.8147e-06, -3.8147e-06)
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_8skn2")
+animation = &"Walk"
+frame_progress = 0.123431
+
+[node name="PlayerDetect" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetect"]
+shape = SubResource("CircleShape2D_s64iu")
+
+[node name="BulletDetect" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BulletDetect"]
+shape = SubResource("CircleShape2D_pomkm")
+
+[node name="HitSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_exm37")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+z_index = 2
+offset_left = -32.0
+offset_top = -96.0
+offset_right = 32.0
+offset_bottom = -80.0
+theme_override_styles/background = SubResource("StyleBoxFlat_3umu5")
+theme_override_styles/fill = SubResource("StyleBoxFlat_0ut0l")
+max_value = 3.0
+value = 3.0
+show_percentage = false
+
+[connection signal="body_entered" from="PlayerDetect" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="PlayerDetect" to="." method="_on_area_2d_body_exited"]
+[connection signal="body_entered" from="BulletDetect" to="." method="_on_bullet_detect_body_entered"]

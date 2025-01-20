@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://6lpu3qe71oiv"]
+
+[ext_resource type="Texture2D" uid="uid://bv2wbv77xx4sq" path="res://pixil-frame-0(4).png" id="1_6y4jc"]
+[ext_resource type="Script" path="res://Scenes/powerup.gd" id="1_donhs"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qrief"]
+radius = 64.0
+
+[node name="Powerup" type="Area2D"]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_donhs")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(4, 4)
+texture = ExtResource("1_6y4jc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_qrief")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

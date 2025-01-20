@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://cbcqlr8pi2k0d"]
+
+[ext_resource type="Script" path="res://Scenes/player.gd" id="1_r3q2p"]
+[ext_resource type="Texture2D" uid="uid://bwao7yop6ujgr" path="res://icon.svg" id="2_wchsi"]
+[ext_resource type="Script" path="res://Scenes/EnemySpawn.gd" id="3_fwayu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7cd0f"]
+size = Vector2(128, 136)
+
+[node name="Main" type="Node2D"]
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(960, 540)
+script = ExtResource("1_r3q2p")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("RectangleShape2D_7cd0f")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player"]
+scale = Vector2(1, 1.0625)
+texture = ExtResource("2_wchsi")
+
+[node name="EnemySpawn" type="Node" parent="."]
+script = ExtResource("3_fwayu")
+
+[node name="EnemyCountdown" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="EnemyCountdown" to="EnemySpawn" method="_on_enemy_countdown_timeout"]
